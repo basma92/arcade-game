@@ -4,6 +4,7 @@ var Enemy = function(x,y) {
     // we've provided one for you to get started
 this.x = x;
 this.y = y;
+//set different speed to each enemy
 this.speed = 50*(Math.random()*5+1);
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -16,13 +17,28 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    //change x coordinate according to different speed
     this.x = this.x + this.speed*dt;
+    //resetlocation of enemy if it is offscreen
+
     if(this.x>500){
       this.x=0;
     }
-
+//this.collision();
+collision();
 };
-
+//Enemy.prototype.collision = function(){
+//this function from live help and some searching for 2dcollisions
+var collision = function(){
+  for(var i = 0; i < allEnemies.length ;i++){
+  if(Player.x < allEnemies[i].x + 40 &&
+    Player.x> allEnemies[i].x-40 &&
+     Player.y < allEnemies[i].y + 40 &&
+      Player.y>allEnemies[i].y-40){
+      Player.resetlocation();
+  }
+  }
+};
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -39,8 +55,9 @@ var Player = function(){
   this.sprite = "images/char-boy.png";
 
 };
-Player.prototype.update = function(dt) {
+Player.prototype.update = function() {
 console.log("update");
+
 };
 
 Player.prototype.render = function() {
@@ -65,10 +82,10 @@ else if(pressedKey === 'right' && this.x<450){
     this.y +=50;
   }
 //try to detect collision
-  if(this.x == Enemy.x  && this.y == Enemy.y ){
+/*  if(this.x == Enemy.x  && this.y == Enemy.y ){
      this.resetlocation();
+*/
 
-   }
 };
 
 Player.prototype.resetlocation = function(){
@@ -82,10 +99,12 @@ Player.prototype.resetlocation = function(){
      this.y = 300;
 //  }
 };
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-// i got the height of enymies by tryingand resetting
+// i got the y coordinate of enymies by trying and resetting
 var allEnemies = [new Enemy(10,220),new Enemy(10,140),new Enemy(10,60)];
 var player = new Player();
 
